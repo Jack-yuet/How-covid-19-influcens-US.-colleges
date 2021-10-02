@@ -1,0 +1,208 @@
+---
+title: "Exploratory Report"
+author: "Jack Yue, Heyang Dai, Jinrui Fang, Yachun Zhang, group: D2"
+date: "2/27/2021"
+output: html_document
+---
+```{r setup, include=FALSE}
+source("Analysis.R")
+```
+
+## Section 1. Problem Domain
+COVID-19, as a global pandemic, has caused a significant impact on modern society 
+in all aspects. Due to the COVID-19, almost every university in the United States 
+has canceled the in-person courses, and the admission policies for first-year 
+students have also changed a lot. For students in the university application season, 
+the application for this year can be much more difficult. As an international 
+student, it is not easy to collect information to choose and apply for a U.S. 
+university. Under the pandemic, this situation can be even more challenging. Our 
+purpose is to collect information on U.S. universities, including school rankings, 
+school admission information, and policy changes response to COVID-19. While providing 
+information to students, we also want to help students choose the university that 
+suits them to apply.
+
+##### Terminology define:
+
+ipeds_id: The ID number of the college in the Integrated Postsecondary Education Data System (IPEDS).
+
+fips: The Federal Information Processing Standards are a set of US Government security requirements for data and its encryption, which are shared and encouraged by the US Federal Government.
+
+quality_of_education: rank for quality of education 
+
+quality_of_faculty: rank for quality of faculty 
+
+influence: rank for influence 
+
+citations: number of citations at the university 
+
+patents: number of patents overall 
+
+performance value: Sum of previous five factors divided by 5, the smaller value is, the better performance of the college is.
+
+## Section 2. Data Description
+ The data set we used is from [Cwur](https://www.kaggle.com/gpreda/world-university-rankings-advanced-analysis). The Center for World University Rankings (CWUR) is a prominent organization and publisher of the one of the largest academic ranking of global universities and colleges. This data set covers three rankings' systems across the world, the Times Higher Education World University Ranking, the Academic Ranking of World Universities, also known as the Shanghai Ranking, to The Center for World University Rankings. Myles O'Neill collected and made this data set available for us to access. At the top of the website, we could see he made this data set to make students investigate the best universities globally. This sample data set filters the ranking data for USA in the most recent year. It contains world ranking, national rank and score for institutions.
+ 
+```{r cwur_sample, echo=FALSE}
+cwurData_sample_df
+```
+
+The data set we used is from [Kaggle](https://www.kaggle.com/flyingwombat/us-news-and-world-reports-college-data). In this data set, we had 777 observations with 18 variables. Jason Nguyen collects
+this data set, and I download it from Kaggle. She collected these data from U.S. News, a media company dedicated to helping citizens, consumers, business leaders, and policy officials make crucial decisions. This data set enables us to filter the university which we want to be based on the data. This sample data set shows enrollment information of each college in the USA. It contains the colleges' name, the number of the applications, the number fo the acceptations, the number of outstate's student, tuition and graduate rate. 
+
+```{r college_sample, echo=FALSE}
+college_sample_df
+```
+
+ The data set we used is from [Github](https://github.com/nytimes/covid-19-data/blob/master/colleges/colleges.csv). This dataset shows the counts of Covid-19 cases reported on college and university campuses in the United States.The author who created this dataset is Albert Sun. 
+At this particular time, knowing the confirmed cases of COVID-19 at each school can help students make a better college choice because the number of confirmed cases is closely related to the students' health. COVID-19 College Cases Dataset was created by New York Times, and they frequently updated this dataset, and the last version was updated on December 11th. In addition, this dataset attractBesidestion because it has a close relationship to all questions related to how COVID-19 affects colleges' action in the U.S.The special term in this dataset: ipeds_id: The ID number of the college in the Integrated Postsecondary Education Data System (IPEDS). This sample data set shows number of covid cases in each college in the USA on latest day of data set.
+
+```{r universitiescases_sample, echo=FALSE}
+universities_sample_cases
+```
+
+The data set we used is from [Github](https://github.com/nytimes/covid-19-data/blob/master/us-states.csv). In this data set, we had 19869 observations with 5 variables. Albert Sun from New York Times collects this data set, and I download it from Github. The most interesting part of this dataset is that it is a daily-updating dataset, which means the author of this dataset will update the total COVID-19 cases of each states daily. This data set enables us to have information about the COVID-19 confirmed cases in each states. I include 10 observations in This sample data set to show the total COVID-19 confirmed cases of 10 states in the United States on December 11th. It contains the date, the name of the state, and the COVID-19 confirmed cases in the state we choose. The special term in this dataset: fips: The Federal Information Processing Standards are a set of US Government security requirements for data and its encryption, which are shared and encouraged by the US Federal Government. 
+
+```{r state_sample, echo=FALSE}
+state_sample_df
+```
+
+### Subsection 2.2 Summary Analysis
+### Summary Description Statistics
+```{r summary statistics for us college, echo=FALSE}
+summary_statistics_for_us_college
+```
+In "college_df" dataset, we can know the enrollment information of each colleges in USA.
+We can find that the average number for the college to accept the students is 2018.804, and the 
+median is 1110. However, the max number for the college to accept the students is 26330, which
+could be an outlier. The average graduation rate for us colleges is 65.463%. However, the max 
+graduation rate is 118, which can be an outlier. 
+
+```{r summary statistics for college cases, echo=FALSE}
+summary_statistics_for_college_cases
+```
+In "us_college_cases" dataset, we can know the cumulated cases numbers for each college in each 
+state and county on 2020-12-11.
+We can find the average number for us colleges cases is rounded to 213 studens, and the median 
+for the cases is rounded to 54 students. The difference between mean and median is such large, 
+which means that the data has a large degree of dispersion, and the overall trend is not obvious.
+
+### States with highest COVID-19 Cases in the U.S.
+This graph shows 4 states with highest COVID-19 cases and 4 states with lowest COVID-19 cases. I find one outlier in this plot, which has the state name of `r outlier_graph2[1]`, and this outlier state has COVID-19 cases of `r outlier_graph2[2]`.
+```{r most_least, echo=FALSE}
+States_with_most_and_least_cases
+```
+
+### Graduation and Acceptance Rate of Colleges in the U.S.
+This graph is to compare the acceptance rate and graduation rate among different colleges. And I find the two outliers, one is `r outlier_1[3]`, it has the most graduation rate, which is `r outlier_1[1]`% and the acceptations rate is `r outlier_1[2]`%. The other one is `r outlier_2[3]`, it has the least acceptance rate, which is `r outlier_2[2]`%, and the graduation rate `r outlier_2[1]`%. 
+```{r rate, echo=FALSE}
+us_college_acceptance_rate_plot
+```
+
+### Students of Cost and Spending in US Colleges 
+This graph is to compare the college total spending for outstate students in different colleges' applications. By looking at the graph, we could tell that there two outliers. One is for extraordinary high college spending that `r outlier_spending_college[1]` would spend "`r Outlier_specific_spending[1]`" dollars for college education fees.In addition, antoher outlier was that `r Outlier_Specific_college[1]` has extremely high applicattions, "`r Outlier_Specific_applications[1]`" applications.
+```{r Cost and Spending of each college, echo=FALSE}
+college_spending_outstate_plot
+```
+
+## Section 3: Specific Question Analyses
+### Q1: Comparing the data of the private and public colleges? what kinds of information can I get in order to help the students make a better decision?
+By comparing the information from each colleges, we can get lots of useful information in order to help us analysis each college.
+
+At first, I need to split the data into two type, one is the pravite colleges, the other one is the public colleges. Then, I count the mean of the acceptance rate and expend of two types. In order to see the difference between private and public universities more intuitively, I made a plot which is able to see the distributions for each college.
+
+This is my graph for the results of filtering the data into two types of college by comparing there acceptance rate and their expend
+```{r comparing, echo=FALSE}
+college_expend_plot
+```
+
+As a evaluation, the clearest data is the mean of the acceptance rate in private and public colleges, the average acceptance rate of private colleges is `r college_avg_private_acceptance_rate` and the average acceptance rate of public colleges is `r college_avg_public_acceptance_rate[1]`. We can see the average acceptance of the private colleges is a little larger than the average acceptance of the public colleges which can be ignored. Hence, I think the acceptance rate between the private and public colleges are almost equal which means students do not need to consider. What is more, the average expend for the private colleges is `r college_avg_private_expend[1]`, and the average expend for the public colleges is `r college_avg_public_expend[1]`. It is obviously that the expend for the private is larger. Hence, when appliers need to consider the expend for different types of colleges. These two factor might help the students make a better decision when they apply for the college. All in all, it is very hard for senior high school students to choose the college based on a few conclusive information. The things we do is try out best to collect the information and make some good conclusion.
+
+### Q2 : How are the factors on ranking US colleges?
+In this section, the question is "How are the factors on ranking US colleges?"
+And we are going to analyze the total six factors influencing the rank of the colleges.
+
+In order to show the clear and understandable graphs and table,
+we might take first top all universities with six factors including quality_of_faculty, quality_of_education, influence, citations, patents and overall performance value.
+
+Note six factors are refered below:
+quality_of_education: rank for quality of education
+quality_of_faculty: rank for quality of faculty
+influence: rank for influence
+citations: number of citations at the university
+patents: number of patents
+overall performance value: Sum of previous five factors divided by 5, the smaller value is, the better performance of the college is
+
+
+We will use mutate to define one new column to compare different colleges,
+since we know the meaning of the factors, so we might guess the small value of our value, the university would be better, and we will figure that out in my problem and giving the analysis on different colleges' performances.
+
+```{r overall performace of different us colleges, echo=FALSE}
+overall_performace_value_plot
+```
+
+```{r table, echo=FALSE}
+The_most_excellent_college
+The_most_poor_college
+college__outlier_of_performance
+```
+From the scatter plot, we can see the data in the plot have the 
+positively tendency with the rankings, showing that the smaller value
+of the college had, the ranking of the college would be higher.
+
+As a result, we got the best performance of college is `r college_collection[1]`,in our defined value and the rest of these five factors are shown in the first table, `r college_collection[2]` might have the most poor performance with five factors are shown in the second table.
+
+Still, we found some outliers as well, like `r college_collection[3]` has extremely high value of OPV but rankings are still higher in our settings with five factors are shown in the third table.
+
+As a result, we made the conclusion that, the variable that we defined "overall performance value" could show the performance in the general view and we could easily to see the rest of five factors influcing the rank of the colleges.
+
+### Q3: What percentage of the number of college students diagnosed in each state accounted for the total number of diagnoses in the state?
+In this section, we are going to use the data of cases from different US colleges 
+comparing with the cases in different states, and find the ratio of cases for each 
+college in its state. As a result, in this section, "cases" " states" and "college" 
+can be the most consideration for answering problems.
+
+We combined the useful lists of "us_college_cases" dataset and "us_cases_info" dataset
+and calculated the proportion of the number of cases in each school to the number 
+of cases in the state.
+
+We will use select() and filter() to select the specific data we want, we'll also use 
+mutate() to define one new colunm to compare the college cases ratio in
+different state. We will use the proportion of the number of cases of college students 
+in each state to guess the risk of students contracting COVID-19 in each state because 
+of going to college, and use this data to help students choose schools during 
+the COVID-19 pandemic. Students may influence their choices through the risk of 
+infection at the local colleges.
+
+This is my bar for us college student cases ratio in each state.
+```{r college student cases ratio, echo=FALSE}
+college_student_cases_ratio_plot
+```
+
+```{r tables, echo=FALSE}
+outlier_1
+outlier_2
+```
+From the data, we can get the average value for college students case ratio, which is 
+`r college_cases_ratio_mean`%, and the median value is `r college_cases_ratio_median`%. We can
+also know that the Wyoming State has the highest college cases ratio, which is `r outlier_1[4]`%, with `r outlier_1[3]` COVID-19 cases in the state, only `r outlier_1[2]` college students were confirmed. And
+Northern Mariana Islands has the lowest college cases ratio, which is `r outlier_2[4]`%. 
+
+In general, the ratio of college students to the number of confirmed cases in the state is about 3%, 
+which is actually maintained at a not very high level. Therefore, we can infer that the 
+probability of young students being diagnosed with COVID-19 in the college is relatively low. 
+At the same time, because many colleges arehaving online course during the COVID-19 pandemic, 
+students can choose their dream college without worrying too much.
+
+### Q4: Does state with higher total cases also have higher ratio of college students infected to the total number of infections in the state?
+
+College students in the United States have also been significantly affected by the COVID-19, many of whom have been diagnosed. Therefore, in order to better understand the specific diagnosis situation of college students, I plan to explore the situation of college students during the pandemic period.
+
+We include a new dataset state_cases, which includes the daily updated COVID-19 cases of each state in U.S. Based on each college's COVID-19 cases, I first calculate the total confirmed cases of college students in each state, and then find out the percentage of college students diagnosed with COVID-19 in each state. After that, I selected 3 states with highest ratio of college students infected to the total number of infections in the state. Then , I also selected 3 states with lowest ratio. At last, I made a plot based on the abovementioned information. 
+
+This is my graph for the results of showing the relationship between total COVID-19 cases and ratio of college students infected to the total number of infections in the state.
+
+```{r top, echo=FALSE}
+COVID_cases_college_proportion_plot
+```
+
+By looking at the quantitative and graphical results, `r lowest_state_percentage_info[1]`is the place with lowest ratio of college students infected to the total number of infections since it has the college students diagnosed case equals to `r lowest_state_percentage_info[3]`, and the total COVID-19 cases in that place is `r lowest_state_percentage_info[2]`. It seems like the pattern goes well because the place with lowest total cases also has lowest ratio. In sharp comparison, `r highest_state_percentage_info[1]` has the greatest percentage of college students diagnosed, but it only has the total college student diagnosed cased of `r highest_state_percentage_info[2]`. However, the data result and the graph clearly shows that the states with highest ratio of college students infected to the total number of infection are not those states with highest total cases. Thus, based on all those analysis I did above, we discovered that there is no clear relationship between the number of total cases and the ratio of college students infected to the total number of infections in the state. 
